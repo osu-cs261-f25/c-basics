@@ -11,6 +11,30 @@ int* create_rand_int_array(int n);
 struct student* create_rand_student_array(int n);
 void free_rand_student_array(struct student* students, int n);
 
+int compare_ints(const void* a, const void* b) {
+  const int* a_int = a;
+  const int* b_int = b;
+  if (*a_int < *b_int) {
+    return -1;
+  } else if (*a_int > *b_int) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+int compare_students(const void* a, const void* b) {
+  const struct student* a_stu = a;
+  const struct student* b_stu = b;
+  if (a_stu->gpa < b_stu->gpa) {
+    return 1;
+  } else if (a_stu->gpa > b_stu->gpa) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
 int main() {
   int n = 10;
   int* array = create_rand_int_array(n);
@@ -20,6 +44,14 @@ int main() {
     printf("  %d", array[i]);
   }
   printf("\n");
+
+  qsort(array, n, sizeof(int), compare_ints);
+  printf("\n== Int array after sorting:\n");
+  for (int i = 0; i < n; i++) {
+    printf("  %d", array[i]);
+  }
+  printf("\n");
+
   free(array);
 
   struct student* students = create_rand_student_array(n);
@@ -27,6 +59,13 @@ int main() {
   for (int i = 0; i < n; i++) {
     printf("  -- %s (%d): %f\n", students[i].name, students[i].id, students[i].gpa);
   }
+
+  qsort(students, n, sizeof(struct student), compare_students);
+  printf("\n== Student array after sorting:\n");
+  for (int i = 0; i < n; i++) {
+    printf("  -- %s (%d): %f\n", students[i].name, students[i].id, students[i].gpa);
+  }
+
   free_rand_student_array(students, n);
 }
 
